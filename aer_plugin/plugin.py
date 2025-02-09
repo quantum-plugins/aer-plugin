@@ -24,6 +24,8 @@ class Plugin(PluginInterface):
         super().__init__(backends)
 
     @check_backend
+    @check_result_type
+    @check_qasm_file
     def execute(
         self,
         target_backend: Backend,
