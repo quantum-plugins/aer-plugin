@@ -1,0 +1,15 @@
+name: aer-plugin
+channels:
+    - conda-forge
+dependencies:
+    - pip
+    - python=3.12
+    - pip:
+          - qiskit-aer==0.16.1
+          - qiskit==1.3.2
+          - black
+          - pylint
+          - tox
+          - mypy
+          - setuptools
+          - pytest

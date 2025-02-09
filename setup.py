@@ -26,13 +26,10 @@ def get_long_description():
 
 
 setup(
-    name="example_plugin",  # your plugin name
-    version="0.0.1",  # your plugin version
+    name="aer_plugin", 
+    version="0.0.1",  
     install_requires=get_requirements(),
     packages=find_packages(
-        # depending on how you have architected your plugin you may need to update the packages
-        # for more info, take a look at:
-        # https://setuptools.pypa.io/en/latest/userguide/quickstart.html#package-discovery
         exclude=["tests"]
     ),
     classifiers=[
@@ -47,11 +44,11 @@ setup(
         "Topic :: System",
         "Topic :: System :: Hardware",
     ],
-    url="https://github.com/Dpbm/quantum-server-plugin-template",  # your repository url
+    url="https://github.com/Dpbm/aer-plugin", 
     license="MIT",
-    author="Dpbm",  # your name
-    author_email="dpbm136@gmail.com",  # your dev email
-    description="A simple quantum plugin",  # describe your plugin
-    long_description=get_long_description(),  # remember to update the README.md file
+    author="Dpbm", 
+    author_email="dpbm136@gmail.com", 
+    description="A quantum plugin for qiskit AER",
+    long_description=get_long_description(),
     long_description_content_type="text/markdown",
 )
