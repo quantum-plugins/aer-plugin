@@ -26,12 +26,10 @@ def get_long_description():
 
 
 setup(
-    name="aer_plugin", 
-    version="0.0.1",  
+    name="aer_plugin",
+    version="0.0.1",
     install_requires=get_requirements(),
-    packages=find_packages(
-        exclude=["tests"]
-    ),
+    packages=find_packages(exclude=["tests"]),
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
@@ -44,10 +42,10 @@ setup(
         "Topic :: System",
         "Topic :: System :: Hardware",
     ],
-    url="https://github.com/Dpbm/aer-plugin", 
+    url="https://github.com/Dpbm/aer-plugin",
     license="MIT",
-    author="Dpbm", 
-    author_email="dpbm136@gmail.com", 
+    author="Dpbm",
+    author_email="dpbm136@gmail.com",
     description="A quantum plugin for qiskit AER",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",

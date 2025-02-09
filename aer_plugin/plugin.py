@@ -5,8 +5,11 @@ from .interface import (
     ResultType,
     QasmFilePath,
     check_backend,
+    check_result_type,
+    check_qasm_file,
     Results,
 )
+from .backends import AER
 
 
 class Plugin(PluginInterface):
@@ -17,11 +20,7 @@ class Plugin(PluginInterface):
     """
 
     def __init__(self):
-        backends = [
-            """
-                Name the backends you have in your plugin as a list!
-            """
-        ]
+        backends = ["aer"]
         super().__init__(backends)
 
     @check_backend
@@ -32,22 +31,10 @@ class Plugin(PluginInterface):
         metadata: Metadata,
         result_type: ResultType,
     ) -> Results:
-        """
-        Do your execution logic here!!
+        backends_handlers = {"aer": AER}
 
-        At the end, you must return either a dict(for counts or quasi dist) or a
-        floating point number (for expectation values).
+        backend_instance = backends_handlers[target_backend](
+            qasm_file_path, metadata, result_type
+        )
 
-        Note: The `check_backend` decorator ensures that only pre-assigned backends are used.
-
-        The client, sends 4 informations that are valuable to you:
-            - target_backend: the choosen backend to run the job
-            - qasm_file_path: the quantum algorithm in qasm format. You may handle
-                IO errors while working with it.
-            - metadata: the python client aggregates some data about the circuit like
-                `depth`, `num_qubits`, `framework`, etc. This data might be insteresting
-                for analysis and further checks.
-            - result_type: the requested result type: `counts`, `quasi_dist` or `expval`.
-        """
-
-        raise NotImplementedError
+        return backend_instance.run_circuit()

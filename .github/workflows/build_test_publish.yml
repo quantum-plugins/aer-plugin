@@ -61,7 +61,7 @@ jobs:
 
         environment:
             name: pypi
-            url: https://pypi.org/p/example_plugin # change example_plugin to your project's name
+            url: https://pypi.org/p/aer_plugin # change example_plugin to your project's name
 
         permissions:
             id-token: write
