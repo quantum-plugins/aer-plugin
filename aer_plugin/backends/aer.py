@@ -1,21 +1,28 @@
+from qiskit import QuantumCircuit
 from ..interface import ResultType, QasmFilePath, Metadata, Results
 from .base_backend import BaseBackend
-from qiskit import QuantumCircuit
+
 
 class AER(BaseBackend):
+    """
+    Default AER simulator handler class.
+    """
+
     def __init__(
         self, qasm_file_path: QasmFilePath, metadata: Metadata, result_type: ResultType
     ):
+        # pylint: disable=useless-parent-delegation
         super().__init__(qasm_file_path, metadata, result_type)
 
     def _exec_expval(self, circuit: QuantumCircuit) -> Results:
-        """ Extracts expval using EstimatorV2 """
+        """Extracts expval using EstimatorV2"""
 
         obs = self.metadata.get("obs")
         assert (
             obs is not None and len(obs) > 0
         ), "You need to provide the observables to get the expectation value!"
 
+        # pylint: disable=import-outside-toplevel
         from qiskit_aer.primitives import EstimatorV2
         from qiskit.quantum_info import SparsePauliOp
 
@@ -25,8 +32,9 @@ class AER(BaseBackend):
         return result[0].data.evs
 
     def _exec_counts(self, circuit: QuantumCircuit) -> Results:
-        """ Extracts counts using AerSimulator directly """
+        """Extracts counts using AerSimulator directly"""
 
+        # pylint: disable=import-outside-toplevel
         from qiskit_aer import AerSimulator
 
         sim = AerSimulator()
@@ -35,7 +43,7 @@ class AER(BaseBackend):
         return result.get_counts()
 
     def _get_shots(self) -> int:
-        """ Ensure that shots is always a number, even when user hasn't set anything. """
+        """Ensure that shots is always a number, even when user hasn't set anything."""
 
         shots = self.metadata.get("shots")
         if not shots:
@@ -44,8 +52,9 @@ class AER(BaseBackend):
         return shots
 
     def _exec_quasi_dist(self, circuit: QuantumCircuit) -> Results:
-        """ Extracts quasi dist using SamplerV1 """
+        """Extracts quasi dist using SamplerV1"""
 
+        # pylint: disable=import-outside-toplevel
         from qiskit_aer.primitives import Sampler
 
         sampler = Sampler()
@@ -56,10 +65,10 @@ class AER(BaseBackend):
 
     def run_circuit(self) -> Results:
         """
-            Execute the circuit aiming to get the required output type.
+        Execute the circuit aiming to get the required output type.
 
-            It first creates the circuit from your qasm file, and the execute
-            it using AER.
+        It first creates the circuit from your qasm file, and the execute
+        it using AER.
         """
         execution_types = {
             "expval": self._exec_expval,
