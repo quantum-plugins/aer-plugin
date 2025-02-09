@@ -1,0 +1,77 @@
+name: Build, Test and publish
+
+on:
+    push:
+        branches:
+            - '*'
+
+jobs:
+    tox:
+        name: Run Tox python-${{ matrix.version }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                version:
+                    - '3.12'
+                    - '3.11'
+                    - '3.10'
+                os:
+                    - ubuntu-20.04
+
+        permissions:
+            contents: read
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ matrix.version }}
+
+            - name: install dependencies
+              run: |
+                  pip install -r requirements.txt -r dev-requirements.txt
+
+            - name: Run tox checks
+              run: tox
+
+    check_branch:
+        name: Check if the current branch is able to upload to PYPI
+        runs-on: ubuntu-24.04
+
+        needs: tox
+
+        outputs:
+            is_main: ${{ steps.check.outputs.is_main }}
+
+        steps:
+            - name: check is main
+              id: check
+              # from: https://stackoverflow.com/questions/60589373/how-to-force-job-to-exit-in-github-actions-step
+              run: echo "is_main=${{ github.ref == 'refs/heads/main' }}" >> $GITHUB_OUTPUT
+
+    publish:
+        name: Upload package to PYPI
+        runs-on: ubuntu-24.04
+
+        needs: check_branch
+
+        if: needs.check_branch.outputs.is_main == 'true'
+
+        environment:
+            name: pypi
+            url: https://pypi.org/p/example_plugin # change example_plugin to your project's name
+
+        permissions:
+            id-token: write
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Publish to PYPI
+              uses: pypa/gh-action-pypi-publish@release/v1
+
+              # to properly publish that take a look at:
+              # https://github.com/marketplace/actions/pypi-publish
+              # https://medium.com/@blackary/publishing-a-python-package-from-github-to-pypi-in-2024-a6fb8635d45d

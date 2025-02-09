@@ -1,0 +1,6 @@
+black
+pylint
+tox
+mypy
+setuptools
+pytest

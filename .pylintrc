@@ -1,0 +1,13 @@
+[MAIN]
+
+ignore = 
+        build,
+        __pycache__,
+        .tox,
+        tests
+
+[MESSAGES CONTROL]
+
+disable = 
+        missing-module-docstring,
+        too-few-public-methods
