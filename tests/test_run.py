@@ -5,11 +5,12 @@ from qiskit.exceptions import QiskitError
 
 class TestRunCircuit:
     """
-    Verify whether running a circuit is working properly.
+    Verify whether running a circuit raise no unexpected behaviour.
     """
 
     def test_correct_counts(self):
-        """should raise no error"""
+        """should raise no error. It's all correct for counts evaluation"""
+
         result = Plugin().execute(
             "aer", "./tests/valid_counts_and_dist.qasm", {}, "counts"
         )
@@ -29,7 +30,8 @@ class TestRunCircuit:
 
     def test_incorrect_counts(self):
         """
-        should raise an error, once the circuit has no measurements.
+        should raise an error, once the circuit has no measurements and can't
+        evaluate counts.
         """
         with pytest.raises(QiskitError):
             Plugin().execute(
@@ -37,7 +39,7 @@ class TestRunCircuit:
             )
 
     def test_correct_quasi_dist(self):
-        """should raise no error"""
+        """should raise no error. The circuit is correct to get quasi dists."""
         result = Plugin().execute(
             "aer", "./tests/valid_counts_and_dist.qasm", {}, "quasi_dist"
         )
@@ -46,7 +48,7 @@ class TestRunCircuit:
 
     def test_correct_quasi_dist_custom_shots(self):
         """
-        should raise no error and the dist of '0' must be 1.0 as well.
+        should raise no error and the dist of 0 must be 1.0 as well.
         """
         result = Plugin().execute(
             "aer", "./tests/valid_counts_and_dist.qasm", {"shots": 120}, "quasi_dist"
@@ -64,7 +66,7 @@ class TestRunCircuit:
             )
 
     def test_correct_expval_one_obs(self):
-        """should raise no error"""
+        """should raise no error and evaluate the observable ZZ to 1"""
         result = Plugin().execute(
             "aer", "./tests/valid_expval.qasm", {"obs": [("ZZ", 1)]}, "expval"
         )
@@ -72,7 +74,7 @@ class TestRunCircuit:
         assert result == 1.0
 
     def test_correct_expval_two_obs(self):
-        """should raise no error"""
+        """should raise no error and sum up all expectation values (total=3)"""
         result = Plugin().execute(
             "aer",
             "./tests/valid_expval.qasm",
@@ -89,7 +91,7 @@ class TestRunCircuit:
             Plugin().execute("aer", "./tests/valid_expval.qasm", {}, "quasi_dist")
 
     def test_incorrect_expval_circuit_with_measurements(self):
-        """should raise no error, once the circuit has measurements but we can evaluate the expval."""
+        """should raise no error, once the circuit has measurements but we can evaluate the expval as well."""
 
         result = Plugin().execute(
             "aer", "./tests/expval_measurements.qasm", {"obs": [("II", 1)]}, "expval"

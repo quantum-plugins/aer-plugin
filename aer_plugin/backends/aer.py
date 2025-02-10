@@ -51,7 +51,7 @@ class AER(BaseBackend):
         if not shots:
             return 1000
 
-        return int(shots) # to ensure that shots will be a integer (for mypy)
+        return int(shots)  # to ensure that shots will be a integer (for mypy)
 
     def _exec_quasi_dist(self, circuit: QuantumCircuit) -> Results:
         """Extracts quasi dist using SamplerV1"""
