@@ -12,4 +12,5 @@ dependencies:
           - tox
           - mypy
           - setuptools
+          - types-setuptools
           - pytest

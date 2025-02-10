@@ -29,7 +29,8 @@ class AER(BaseBackend):
         estimator = EstimatorV2()
         result = estimator.run([(circuit, SparsePauliOp.from_list(obs))]).result()
 
-        return result[0].data.evs
+        # to ensure the expval result will be a flot (for mypy)
+        return float(result[0].data.evs)  # type: ignore[attr-defined]
 
     def _exec_counts(self, circuit: QuantumCircuit) -> Results:
         """Extracts counts using AerSimulator directly"""
@@ -40,7 +41,8 @@ class AER(BaseBackend):
         sim = AerSimulator()
         shots = self._get_shots()
         result = sim.run(circuit, shots=shots).result()
-        return result.get_counts()
+
+        return result.get_counts()  # type: ignore[no-any-return]
 
     def _get_shots(self) -> int:
         """Ensure that shots is always a number, even when user hasn't set anything."""
@@ -49,7 +51,7 @@ class AER(BaseBackend):
         if not shots:
             return 1000
 
-        return shots
+        return int(shots) # to ensure that shots will be a integer (for mypy)
 
     def _exec_quasi_dist(self, circuit: QuantumCircuit) -> Results:
         """Extracts quasi dist using SamplerV1"""
@@ -61,7 +63,7 @@ class AER(BaseBackend):
         shots = self._get_shots()
         result = sampler.run([circuit], shots=shots).result()
 
-        return result.quasi_dists[0]
+        return result.quasi_dists[0]  # type: ignore[no-any-return]
 
     def run_circuit(self) -> Results:
         """
