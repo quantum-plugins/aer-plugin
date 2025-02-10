@@ -4,7 +4,7 @@ from aer_plugin.plugin import Plugin
 
 class TestCreation:
     """
-    Verify it creating a plugin instance and running a job
+    Verify whether creating a plugin instance and running a job
     is working correctly.
     """
 
