@@ -1,74 +1,103 @@
-# Quantum Server Plugin
+# AER Quantum Server Plugin
 
-![build, test and publish](https://github.com/github/Dpbm/quantum-server-plugin-template/workflows/build_test_publish.yml/badge.svg)
+![build, test and publish](https://github.com/github/Dpbm/aer_plugin/workflows/build_test_publish.yml/badge.svg)
 
-To create a plugin for [local-quantum-server](https://github.com/Dpbm/local-quantum-server), `start by using this template` and then follow the steps below.
+This is the AER plugin for quantum local server. With it, you can easily run your AER jobs in a local server outside your own computer.
 
-## Setup your plugin
+## Functionalities
 
-1. Setup your `requirements.txt`
+In this early stage, this plugin manages the following backends:
 
-In your plugin, you'll probably need some external dependencies, like `qiskit`, `cirq`, `pennylane`, `numpy`, etc. List every required dependency inside the [requirements.txt file](./requirements.txt), line by line.
+- AER (pure AER implementation)
 
-2. Create a virtual environment
+and to them you can submit jobs to get: `counts`, `quasi distributions` and `expectation values`.
 
-To keep your work clean, make sure to use a virtual environment, this way your work won't get conflicted with pre-installed system dependencies.
+Even thought it's very limited for now, in future versions we aim to make more backends available.
 
-Also, using environment managers allows you to easily change python versions. By default I'm using the `python 3.12.8`, however it maybe not the perfect match for your plugin. So remember to change it and explicit it on your project.
+## No Server
 
-3. Add your code
+Although this is meant to be used inside a docker container as a plugin for quantum local server, you can run it locally without it.
 
-After that, update the folder [example_plugin](./example_plugin/) to your plugin's name and start adding your code.
-
-Inside [example_plugin](./example_plugin/) directory, you'll find some files:
-
-- [interface.py](./example_plugin/interface.py): that's the file that creates the abstract class `Plugin`, which your project must use to ensure the correct usability. 
-Don't change this file. Only `import` the `types`, `classes` and `functions` you need.
-- [plugin.py](./example_plugin/plugin.py): that's the plugin starting point. In it, you may list the backends names your plugin can access. Also, you need to add some logic to handle the user input inside the `execute` method. By default, the class uses a decorator (`@check_backend`) to ensure that only defined backends can be accessed. However, you're free to implement your logic and do further checks.
-
-Besides that, you're allowed to add new files and create your structure. But, keep in mind that, more complex projects may need additional configurations on either [setup.py](./setup.py) or [pyproject.toml](./pyproject.toml).
-
-Also, you need to ensure the correct handling of the `result_types`, the possible inputs are: `'quasi_dist', 'counts', 'expval'` for now.
-
-4. Add tests
-
-Inside [tests directory](./tests/) add your tests using pytest. Although it's not mandatory, it's a nice practice to make your project easier to manipulate.
-
-By default, `tox` is configured to run lint and type checks, as well as code tests. so remember to install the `dev-dependencies` and run tox:
+To do that, simply install the dependencies:
 
 ```bash
-pip install -r dev-requirements.txt
-tox
+pip install -r requirements
 ```
 
-5. Update the [setup.py](./setup.py)
 
-With your code done, start adding your info to [setup.py](./setup.py). If you have a more complex structure, you may need to add more configurations to that, so remember to check the [setuptools guide](https://setuptools.pypa.io/en/latest/index.html).
+and then import the `aer_plugin` module inside your python script:
 
-6. Update the [LICENSE](./LICENSE)
+```python
+#main.py
 
-The License for plugins is always `MIT`. So before proceeding, remember to update the [LICENSE file](./LICENSE) adding the year and your name.
+from aer_plugin import Plugin
 
-6. Update the [README.md file](./README.md)
+p = Plugin()
 
-Doing that, delete everything in this very `README.md` file and describe your project.
+# your qiskit code
+# remember to export 
+# your circuit to a 
+# .qasm file
+# ...
 
-7. Update GH Actions workflow
+target_backend = "aer"
+qasm_file_path = "<qasm_file_path>"
+metadata = {"shots":1000}
+result_type = "counts"
 
-To be an accepted plugin, your must have your code on github. Due to that, it's possible to run some CI workflows to ensure you're code is correct and ready to be distributed.
+result = p.execute(
+    target_backend, 
+    qasm_file_path, 
+    metadata, 
+    result_type)
 
-So, to do that, go to [.github/workflows/build_test_publish.yml](./.github/workflows/build_test_publish.yml) and them ensure to update what's being required inside.
+print(result) # e.g.: {'0':1000}
 
-For plugins, every time it's pushed to the main branch, the code is built, tested and them published to PYPI automatically. To ensure that everything is going to go well, create and account at [pypi.org](https://pypi.org/) and setup a [Trusted publisher](https://docs.pypi.org/trusted-publishers/) mapping to your github workflow.
+```
 
-8. Request your plugin to be added to the list
 
-After that, open an issue on [github.com/quantum-plugins/plugins-list](https://github.com/quantum-plugins/plugins-list) requesting your plugin to be added on the official plugins list. 
+## Dev
 
-As soon as possible we'll see that and procede with the addition and your plugins will be called official 😊
+For developers. There's some dependencies you need to have installed before adding any code. To ease this installation, you can use conda/mamba/conda-lock to load everything in the correct version.
 
-## CONGRATS!!!
+```bash
+# using conda/mamba/conda-lock
+mamba env create -f environment.yml
+conda env create -f environment.yml
+conda-lock install -n aer-plugin conda-lock.yml
 
-Now, you have a quantum plugin!!!!
+# then activate your environment
+conda activate aer-plugin
+mamba activate aer-plugin
 
-Thank you so much for joining this amazing community🎉🎉🎉
+# however, if you prefere, you can use pip as well
+# make sure to use a virtual environment to avoid conflicts
+pip install -r requirements.txt -r dev-requirements.txt
+
+```
+
+In this project are being used `3` check stages to ensure code quality, which are:
+
+- linting/code style: using `pylint`/`black`
+- types: using `mypy`
+- tests: using `pytest`
+
+To manage all this, we're using `tox`, for `3` python versions: `3.10`, `3.11` and `3.12`, expecting more versions in the future.
+
+During development, ensure to run tox regularly to ensure that everything is behaving as expected. 
+
+to learn more about tox check their [wiki here](https://tox.wiki/).
+
+
+## Contributing
+
+To start contributing for this project, make sure to:
+
+- open an issue explaining what you have in mind
+- follow the [dev section](#dev)
+- add as many tests as you can on [./tests](./tests/)
+- use a different branch for you modifications
+- add comments explaining parts of your code that can be directly understand without deep investigation
+- create readable code
+
+Ensuring that, you're ready to open a pull request and be part of this community :)
