@@ -22,7 +22,6 @@ class Plugin(PluginInterface):
 
     def __init__(self):
         current_file_path = os.path.dirname(__file__)
-        print(current_file_path)
         backends_relative_path = os.path.join(current_file_path, "backends.txt")
 
         with open(backends_relative_path, "r", encoding="UTF-8") as file:
