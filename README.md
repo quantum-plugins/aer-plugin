@@ -1,7 +1,7 @@
 # AER Quantum Server Plugin
 
-![build, test and publish](https://github.com/github/Dpbm/aer_plugin/workflows/build_test_publish.yml/badge.svg)
-![release version](https://github.com/github/Dpbm/aer_plugin/workflows/release.yml/badge.svg)
+![Build, Test and publish](https://github.com/quantum-plugins/aer-plugin/actions/workflows/build_test_publish.yml/badge.svg)
+![release version](https://github.com/quantum-plugins/aer-plugin/actions/workflows/release.yml/badge.svg)
 
 This is the AER plugin for quantum local server. With it, you can easily run your AER jobs in a local server outside your own computer.
 
