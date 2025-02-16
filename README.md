@@ -15,6 +15,14 @@ and to them you can submit jobs to get: `counts`, `quasi distributions` and `exp
 
 Even thought it's very limited for now, in future versions we aim to make more backends available.
 
+## Installation
+
+To install run in your terminal:
+
+```bash
+pip install aer-plugin
+```
+
 ## No Server
 
 Although this is meant to be used inside a docker container as a plugin for quantum local server, you can run it locally without it.
