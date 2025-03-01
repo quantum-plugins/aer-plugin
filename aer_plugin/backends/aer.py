@@ -30,8 +30,8 @@ class AER(BaseBackend):
         result = estimator.run([(circuit, SparsePauliOp.from_list(obs))]).result()
 
         # to ensure the expval result will be a flot (for mypy)
-        return float(result[0].data.evs)  # type: ignore[attr-defined]
-
+        return result[0].data.evs
+        
     def _exec_counts(self, circuit: QuantumCircuit) -> Results:
         """Extracts counts using AerSimulator directly"""
 

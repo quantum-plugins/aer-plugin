@@ -12,7 +12,7 @@ Backends = List[Backend]
 Metadata = Dict[Any, Any]
 ResultType = str
 QasmFilePath = str
-Results = Dict[str | int, float] | float
+Results = Dict[str | int, float] | List[float]
 
 
 def check_backend(func):
