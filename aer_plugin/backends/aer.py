@@ -17,7 +17,7 @@ class AER(BaseBackend):
     def _exec_expval(self, circuit: QuantumCircuit) -> Results:
         """Extracts expval using EstimatorV2"""
 
-        obs = self.metadata.get("obs")
+        obs = self._metadata.get("obs")
         assert (
             obs is not None and len(obs) > 0
         ), "You need to provide the observables to get the expectation value!"
@@ -31,7 +31,7 @@ class AER(BaseBackend):
 
         # to ensure the expval result will be a flot (for mypy)
         return result[0].data.evs
-        
+
     def _exec_counts(self, circuit: QuantumCircuit) -> Results:
         """Extracts counts using AerSimulator directly"""
 
@@ -47,7 +47,7 @@ class AER(BaseBackend):
     def _get_shots(self) -> int:
         """Ensure that shots is always a number, even when user hasn't set anything."""
 
-        shots = self.metadata.get("shots")
+        shots = self._metadata.get("shots")
         if not shots:
             return 1000
 
@@ -78,7 +78,7 @@ class AER(BaseBackend):
             "quasi_dist": self._exec_quasi_dist,
         }
 
-        circuit = QuantumCircuit.from_qasm_file(self.qasm_file_path)
+        circuit = QuantumCircuit.from_qasm_file(self._qasm_file_path)
 
-        execution_method = execution_types[self.result_type]
+        execution_method = execution_types[self._result_type]
         return execution_method(circuit)

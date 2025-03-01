@@ -10,6 +10,6 @@ class BaseBackend(ABC):
     def __init__(
         self, qasm_file_path: QasmFilePath, metadata: Metadata, result_type: ResultType
     ):
-        self.result_type = result_type
-        self.qasm_file_path = qasm_file_path
-        self.metadata = metadata
+        self._result_type = result_type
+        self._qasm_file_path = qasm_file_path
+        self._metadata = metadata
