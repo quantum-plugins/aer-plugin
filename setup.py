@@ -50,5 +50,4 @@ setup(
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     include_package_data=True,
-    package_data={"aer_plugin":["aer_plugin/backends.txt"]}
 )
