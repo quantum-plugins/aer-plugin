@@ -17,9 +17,9 @@ class AER(BaseBackend):
     def _exec_expval(self, circuit: QuantumCircuit) -> Results:
         """Extracts expval using EstimatorV2"""
 
-        obs = self._metadata.get("obs")
+        obs_list = self._metadata.get("obs")
         assert (
-            obs is not None and len(obs) > 0
+            obs_list is not None and len(obs_list) > 0 and isinstance(obs_list, list)
         ), "You need to provide the observables to get the expectation value!"
 
         # pylint: disable=import-outside-toplevel
@@ -27,10 +27,11 @@ class AER(BaseBackend):
         from qiskit.quantum_info import SparsePauliOp
 
         estimator = EstimatorV2()
-        result = estimator.run([(circuit, SparsePauliOp.from_list(obs))]).result()
+        results = estimator.run(
+            [(circuit, SparsePauliOp.from_list(obs)) for obs in obs_list]
+        ).result()
 
-        # to ensure the expval result will be a flot (for mypy)
-        return result[0].data.evs  # type: ignore
+        return [result.data.evs for result in results]  # type: ignore
 
     def _exec_counts(self, circuit: QuantumCircuit) -> Results:
         """Extracts counts using AerSimulator directly"""

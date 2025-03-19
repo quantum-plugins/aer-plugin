@@ -68,21 +68,32 @@ class TestRunCircuit:
     def test_correct_expval_one_obs(self):
         """should raise no error and evaluate the observable ZZ to 1"""
         result = Plugin().execute(
-            "aer", "./tests/valid_expval.qasm", {"obs": [("ZZ", 1)]}, "expval"
+            "aer", "./tests/valid_expval.qasm", {"obs": [[("ZZ", 1)]]}, "expval"
         )
 
-        assert result == 1.0
+        assert result == [1.0]
 
-    def test_correct_expval_two_obs(self):
+    def test_correct_expval_two_obs_same_pub(self):
         """should raise no error and sum up all expectation values (total=3)"""
         result = Plugin().execute(
             "aer",
             "./tests/valid_expval.qasm",
-            {"obs": [("ZI", 1), ("IZ", 1), ("ZZ", 1)]},
+            {"obs": [[("ZI", 1), ("IZ", 1), ("ZZ", 1)]]},
             "expval",
         )
 
-        assert result == 3.0
+        assert result == [3.0]
+
+    def test_correct_expval_one_obs_per_pub(self):
+        """should return a list of expectation values with size 2"""
+        result = Plugin().execute(
+            "aer",
+            "./tests/valid_expval.qasm",
+            {"obs": [[("ZI", 1)], [("ZI", 1)]]},
+            "expval",
+        )
+
+        assert result == [1.0, 1.0]
 
     def test_incorrect_expval_no_obs(self):
         """should raise an error, once there's no observables defined."""
@@ -94,6 +105,6 @@ class TestRunCircuit:
         """should raise no error, once the circuit has measurements but we can evaluate the expval as well."""
 
         result = Plugin().execute(
-            "aer", "./tests/expval_measurements.qasm", {"obs": [("II", 1)]}, "expval"
+            "aer", "./tests/expval_measurements.qasm", {"obs": [[("II", 1)]]}, "expval"
         )
-        assert result == 1.0
+        assert result == [1.0]
