@@ -64,6 +64,17 @@ print(result) # e.g.: {'0':1000}
 
 ```
 
+## Usage
+
+As postulated by the [qserver](https://github.com/Dpbm/qserver) documentation, the 3 possible outcomes are `counts`, `quasi dist` and `expval`.
+To evaluate them with this plugin you must provide some metadata in a specific pattern:
+
+| type   | what you need  |
+|--------|----------------|
+| counts | no metadata is mandatory here, but you can specify the amount of shots you want `metadata={"shots":1024}`, by default the 1000 are taken. |
+| quasi-dist | the same as counts |
+| expval | the `obs`(observables) metadata is mandatory to run the estimator. You must provide a list of lists. Each list inside the main list represents a distinct `pub` (circuit evaluation - example: `[ [pub1], [pub2], ..., [pubn] ]`). Inside these lists, you must provide tuples with an observable and its coefficient like: `(obs, coeff)`. Here's an example of a correct expval experiment metadata: `[ [('ZZI', 0.4), ('ZIZ', 0.3)], [('IZ', 1)] ]`.
+
 
 ## Dev
 
