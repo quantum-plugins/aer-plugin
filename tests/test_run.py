@@ -16,6 +16,7 @@ class TestRunCircuit:
         )
 
         assert result.get("0") == 1000
+        assert isinstance(result, dict)
 
     def test_correct_counts_custom_shots(self):
         """
@@ -27,6 +28,7 @@ class TestRunCircuit:
         )
 
         assert result.get("0") == 120
+        assert isinstance(result, dict)
 
     def test_incorrect_counts(self):
         """
@@ -45,6 +47,7 @@ class TestRunCircuit:
         )
 
         assert result.get(0) == 1.0
+        assert isinstance(result, dict)
 
     def test_correct_quasi_dist_custom_shots(self):
         """
@@ -55,6 +58,7 @@ class TestRunCircuit:
         )
 
         assert result.get(0) == 1.0
+        assert isinstance(result, dict)
 
     def test_incorrect_quasi_dist(self):
         """

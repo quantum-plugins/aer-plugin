@@ -64,7 +64,7 @@ class AER(BaseBackend):
         shots = self._get_shots()
         result = sampler.run([circuit], shots=shots).result()
 
-        return result.quasi_dists[0]  # type: ignore[no-any-return]
+        return dict(result.quasi_dists[0])  # type: ignore[no-any-return]
 
     def run_circuit(self) -> Results:
         """
