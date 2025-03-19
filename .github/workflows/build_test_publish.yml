@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - '*'
+        tags:
+            - '*'
 
 jobs:
     tox:
@@ -36,28 +38,13 @@ jobs:
             - name: Run tox checks
               run: tox
 
-    check_branch:
-        name: Check if the current branch is able to upload to PYPI
-        runs-on: ubuntu-24.04
-
-        needs: tox
-
-        outputs:
-            is_main: ${{ steps.check.outputs.is_main }}
-
-        steps:
-            - name: check is main
-              id: check
-              # from: https://stackoverflow.com/questions/60589373/how-to-force-job-to-exit-in-github-actions-step
-              run: echo "is_main=${{ github.ref == 'refs/heads/main' }}" >> $GITHUB_OUTPUT
-
     publish:
         name: Upload package to PYPI
         runs-on: ubuntu-24.04
 
-        needs: check_branch
+        needs: tox
 
-        if: needs.check_branch.outputs.is_main == 'true'
+        if: startsWith(github.ref, 'refs/tags/')
 
         environment:
             name: pypi
