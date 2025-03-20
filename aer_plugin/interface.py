@@ -4,13 +4,13 @@
 
 from abc import ABC, abstractmethod
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Literal
 from .config import AVAILABLE_RESULT_TYPES
 
 Backend = str
 Backends = List[Backend]
 Metadata = Dict[Any, Any]
-ResultType = str
+ResultType = Literal["counts", "quasi_dist", "expval"]
 QasmFilePath = str
 Results = Dict[str | int, float] | List[float]
 
