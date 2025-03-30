@@ -9,7 +9,7 @@ on:
 
 jobs:
     tox:
-        name: Run Tox python-${{ matrix.version }}
+        name: Run Tox python-${{ matrix.version }} ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
