@@ -79,7 +79,7 @@ class AER(BaseBackend):
             "quasi_dist": self._exec_quasi_dist,
         }
 
-        circuit = QuantumCircuit.from_qasm_file(self._qasm_file_path)
+        circuit = self.circuit_from_qasm(self._qasm_file_path)
 
         execution_method = execution_types[self._result_type]
         return execution_method(circuit)
